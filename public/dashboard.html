@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Dust Suppression System</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome for icons -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 20px 0;
+        }
+
+        .switch-container {
+            margin-bottom: 30px;
+        }
+
+        .sensor-container, .runtime-container {
+            margin: 20px 0;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 50px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            border-radius: 50px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: #4CAF50;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px 20px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <button class="logout-button" onclick="logout()">Logout</button>
+    
+    <div class="container">
+        <h1><i class="fas fa-cloud"></i> IoT Dust Suppression System</h1>
+
+        <div class="switch-container">
+            <label class="switch">
+                <input type="checkbox" id="foggerToggle">
+                <span class="slider round"></span>
+            </label>
+            <p>Fogger Status: <span id="foggerStatus">OFF</span></p>
+        </div>
+
+        <div class="sensor-container">
+            <h2><i class="fas fa-tachometer-alt"></i> Dust Sensor Readings</h2>
+            <p>Dust Level: <span id="dustLevel">0</span></p>
+        </div>
+
+        <div class="runtime-container">
+            <h2><i class="fas fa-clock"></i> Fogger Runtime</h2>
+            <p>Total Run Time: <span id="runtime">0</span> seconds</p>
+        </div>
+    </div>
+
+    <script>
+        // Check if the user is authenticated by looking for the token
+        if (!localStorage.getItem('token')) {
+            window.location.href = 'login.html';  // Redirect to login page if no token is found
+        }
+
+        // Logout function to clear the token
+        function logout() {
+            localStorage.removeItem('token');  // Clear token from localStorage
+            window.location.href = 'login.html';  // Redirect to login page
+        }
+
+        // Add event listener to toggle fogger status
+        document.getElementById('foggerToggle').addEventListener('change', (event) => {
+            const status = event.target.checked ? 'ON' : 'OFF';
+            document.getElementById('foggerStatus').textContent = status;
+        });
+
+        // Simulate Dust Sensor Readings (you can replace this with actual sensor data)
+        setInterval(() => {
+            const dustLevel = Math.floor(Math.random() * 100); // Random dust level between 0 and 100
+            document.getElementById('dustLevel').textContent = dustLevel;
+        }, 1000);  // Update every second
+
+        // Simulate Fogger Runtime (you can replace this with actual runtime data)
+        let runtime = 0;
+        setInterval(() => {
+            runtime += 1;
+            document.getElementById('runtime').textContent = runtime;
+        }, 1000);  // Update every second
+    </script>
+</body>
+</html>
