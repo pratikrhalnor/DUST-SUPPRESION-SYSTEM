@@ -9,7 +9,6 @@ body {
     margin: 0;
     text-align: center;
     position: relative;
-     /* To position the logout button */
 }
 
 .container {
@@ -19,6 +18,63 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 60%;
     max-width: 800px;
+}
+
+/* Form Container Styles */
+.form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 320px;
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #45a049;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.link a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.link a:hover {
+    text-decoration: underline;
 }
 
 /* Heading Style */
@@ -33,12 +89,13 @@ h2 {
     color: #333;
 }
 
-/* Switch Styles */
+/* Switch Styles for Fogger Status */
 .switch {
     position: relative;
     display: inline-block;
     width: 60px;
     height: 34px;
+    margin-bottom: 20px;
 }
 
 .switch input {
@@ -51,5 +108,59 @@ h2 {
     position: absolute;
     cursor: pointer;
     top: 0;
-   
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    border-radius: 50%;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Dust Monitor Section */
+.dust-monitor {
+    margin-bottom: 20px;
+}
+
+.dust-monitor p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Dashboard and Logout Styles */
+#dashboard {
+    display: block;
+}
+
+#dashboard button {
+    background-color: #d9534f;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#dashboard button:hover {
+    background-color: #c9302c;
 }

@@ -1,54 +1,104 @@
-// Initialize the fogger and dust level readings
-let foggerStatus = false;
-let dustLevel = 0;
-let foggerRuntime = 0;
-let foggerInterval;
-let dustLevelInterval;
 
-// Update the fogger status and display
-function updateFoggerStatus() {
-    const foggerStatusElement = document.getElementById('foggerStatus');
-    if (foggerStatus) {
-        foggerStatusElement.textContent = 'ON';
-        // Start the fogger runtime
-        if (!foggerInterval) {
-            foggerInterval = setInterval(() => {
-                foggerRuntime++;
-                document.getElementById('runtime').textContent = foggerRuntime;
-            }, 1000); // Update every second
+// Get the form elements
+const registerForm = document.getElementById('registerForm');
+const loginForm = document.getElementById('loginForm');
+
+// Get the error message elements
+const registerErrorMessage = document.getElementById('registerErrorMessage');
+const loginErrorMessage = document.getElementById('loginErrorMessage');
+
+// Function to show the register form
+function showRegisterForm() {
+    document.getElementById('register-form').style.display = 'block';
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'none';
+}
+
+// Function to show the login form
+function showLoginForm() {
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+}
+
+// Function to show the dashboard
+function showDashboard() {
+    document.getElementById('register-form').style.display = 'none';
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+}
+
+// Function to handle logout
+function logout() {
+    // Clear local storage
+    localStorage.clear();
+    // Show the login form
+    showLoginForm();
+}
+
+// Function to handle register form submission
+async function handleRegister(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert('Registration successful! Please login.');
+            showLoginForm();
+        } else {
+            registerErrorMessage.textContent = data.message;
         }
-    } else {
-        foggerStatusElement.textContent = 'OFF';
-        // Stop the fogger runtime
-        clearInterval(foggerInterval);
-        foggerInterval = null;
+    } catch (error) {
+        console.error('Registration failed:', error);
+        registerErrorMessage.textContent = 'An error occurred. Please try again later.';
     }
 }
 
-// Update the dust level readings
-function updateDustLevel() {
-    dustLevel = Math.floor(Math.random() * 100); // Simulating dust level readings between 0 and 100
-    document.getElementById('dustLevel').textContent = dustLevel;
+// Function to handle login form submission
+async function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem('token', data.token);
+            alert('Login successful!');
+            showDashboard();
+        } else {
+            loginErrorMessage.textContent = data.message;
+        }
+    } catch (error) {
+        console.error('Login failed:', error);
+        loginErrorMessage.textContent = 'An error occurred. Please try again later.';
+    }
 }
 
-// Start the dust sensor updates every 5 seconds
-dustLevelInterval = setInterval(updateDustLevel, 5000);
+// Add event listeners for the forms
+registerForm.addEventListener('submit', handleRegister);
+loginForm.addEventListener('submit', handleLogin);
 
-// Set up the fogger toggle switch
-document.getElementById('foggerToggle').addEventListener('change', (event) => {
-    foggerStatus = event.target.checked; // Set the fogger status based on switch position
-    updateFoggerStatus(); // Update the fogger status display
-});
-
-// Logout function
-document.getElementById('logoutButton').addEventListener('click', function() {
-    // Clear session or local storage data if needed
-    localStorage.removeItem('token');
-    
-    // Redirect to the login page
-    window.location.href = 'login.html';
-});
-
-// On page load, update the fogger status and dust level
-updateFoggerStatus();
-updateDustLevel();
+// Show the login form by default
+showLoginForm();
